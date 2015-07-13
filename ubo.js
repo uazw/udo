@@ -10,17 +10,10 @@ UEvent.prototype = {
 	}
 };
 
-function Tab() {
-	var self = this;
-	UEvent.call(this);
-	
-	self.init = function(tabNode) {
-		self.tabNode = tabNode;
-		self.tabContentDiv = document.getElementById(getTabContentId());
-		
-		function getTabContentId() {
-			return self.tabNode.firstChild.getAttribute('for');
-		}
+var Tab = (function () {
+	function Tab(tabNode) {
+		var self = this;
+		init();
 		
 		self.on('beforeHidden', function () {
 			console.log('i will going..');
@@ -28,20 +21,30 @@ function Tab() {
 		self.on('afterHidden', function () {
 			console.log('gone');
 		});
-	};
 	
-	self.active = function() {
-		self.tabNode.setAttribute('class', 'active');
-		self.tabContentDiv.style['display'] = 'block';
-	};
-	
-	self.disActive = function() {
-		self.tabNode.removeAttribute('class');
-		self.tabContentDiv.style['display'] = 'none';		
-	};
-	
-}
-Tab.prototype = Object.create(UEvent.prototype);
+		self.active = function() {
+			self.tabNode.setAttribute('class', 'active');
+			self.tabContentDiv.style['display'] = 'block';
+		};
+		
+		self.disActive = function() {
+			self.tabNode.removeAttribute('class');
+			self.tabContentDiv.style['display'] = 'none';		
+		};
+		
+		function getTabContentId() {
+			return self.tabNode.firstChild.getAttribute('for');
+		}
+		
+		function init() {
+			UEvent.call(self);
+			self.tabNode = tabNode;
+			self.tabContentDiv = document.getElementById(getTabContentId());
+		}
+	}
+	Tab.prototype = Object.create(UEvent.prototype);
+	return Tab;
+})();
 
 function TabSet() {
 	var self = this;
@@ -52,8 +55,7 @@ function TabSet() {
 		self.tabs = [];
 		
 		eachHTMLCollection(tabsNodes, function (tabNode) {
-			var tab = new Tab();
-			tab.init(tabNode);
+			var tab = new Tab(tabNode);
 			self.tabs.push(tab);
 			
 			tabNode.addEventListener('click', function () {
