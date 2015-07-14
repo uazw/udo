@@ -46,11 +46,9 @@ var Tab = (function () {
 	return Tab;
 })();
 
-function TabSet() {
+var TabSet = (function () {
 	var self = this;
-	UEvent.call(self);
-
-	self.init = function (id) {
+	function TabSet(id) {
 		var tabsNodes = document.getElementById(id).getElementsByTagName('li');
 		self.tabs = [];
 		
@@ -71,9 +69,11 @@ function TabSet() {
 			tab.active();
 			self.currentTab = tab;
 		}
-	};
-}
-TabSet.prototype = Object.create(UEvent.prototype);
+	}
+	
+	TabSet.prototype = Object.create(UEvent.prototype);	
+	return TabSet;
+})();
 
 function eachHTMLCollection(tags, func) {
 	for (var i = 0; i < tags.length; i++) {
@@ -81,4 +81,4 @@ function eachHTMLCollection(tags, func) {
 	}
 }
 
-(new TabSet()).init('tabs');
+new TabSet('tabs');
