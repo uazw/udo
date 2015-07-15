@@ -8,16 +8,21 @@
 	<body>
 		<div id='multipage'>
 			<a href="#" class="button">front page</a>
-			<select name="pagenumber">
-				<option name='1'>1</option>
-				<option name='1'>1</option>
-				<option name='1'>1</option>
-				<option name='1'>1</option>
-				<option name='1'>1</option>
-				
+			<select>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>		
 			</select>
 			<a href="#" class="button">next page</a>
 		</div>
 	</body>
 	<script src="ubo.js" ></script>
+	
+	<script type="text/javascript">
+		(function () {
+			new MultiPage('multipage');
+		})();
+	</script>
 </html>	

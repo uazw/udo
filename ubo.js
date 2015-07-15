@@ -47,8 +47,9 @@ var Tab = (function () {
 })();
 
 var TabSet = (function () {
-	var self = this;
 	function TabSet(id) {
+		var self = this;	
+		
 		var tabsNodes = document.getElementById(id).getElementsByTagName('li');
 		self.tabs = [];
 		
@@ -75,10 +76,37 @@ var TabSet = (function () {
 	return TabSet;
 })();
 
+function MultiPage(id) {
+	var self = this;
+	UIEvent.call(self);
+	
+	function multiPageDiv() {
+		return document.getElementById(id);
+	}
+	
+	function selectElement() {
+		return multiPageDiv().getElementsByTagName('select')[0];
+	}
+	
+	function frontButton() {
+		return multiPageDiv().getElementsByClassName('a')[0];
+	}
+	
+	function nextButton() {
+		return multiPageDiv().getElementsByClassName('a')[1];
+	}
+	
+	function init() {
+		nextButton().addEventListener('click', function () {
+			console.log('you click me !!!');
+		});
+	}	
+}
+MultiPage.prototype = Object.create(UIEvent.prototype);
+
+
 function eachHTMLCollection(tags, func) {
 	for (var i = 0; i < tags.length; i++) {
 		func(tags.item(i));
 	}
 }
-
-new TabSet('tabs');
