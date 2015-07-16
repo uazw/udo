@@ -2,8 +2,12 @@ function UEvent() {
 	this.handlers = {};
 }
 UEvent.prototype = {
-	trigger: function (name) {
-		this.handlers[name]();
+	trigger: function (name, params) {
+		if (this.handlers[name]) {
+			this.handlers[name](params);
+		} else {
+			return;
+		}
 	},
 	on: function (name, callback) {
 		this.handlers[name] = callback;
@@ -76,33 +80,66 @@ var TabSet = (function () {
 	return TabSet;
 })();
 
-function MultiPage(id) {
-	var self = this;
-	UIEvent.call(self);
-	
-	function multiPageDiv() {
-		return document.getElementById(id);
+var MultiPage  = (function () {
+	function MultiPage(id) {
+		var self = this;
+		init();
+		
+		function multiPageDiv() {
+			return document.getElementById(id);
+		}
+		
+		function selectElement() {
+			return multiPageDiv().getElementsByTagName('select')[0];
+		}
+		
+		
+		function valuesOfOption() {
+			var optionElements = selectElement().getElementsByTagName('option');
+			var optionValues = [];
+			eachHTMLCollection(optionElements, function (element) {
+				optionValues.push(element.getAttribute('value'));
+			});
+			
+			return optionValues;
+		}
+		
+		function frontButton() {
+			return multiPageDiv().getElementsByTagName('a')[0];
+		}
+		
+		function nextButton() {
+			return multiPageDiv().getElementsByTagName('a')[1];
+		}
+		
+		function init() {
+			UEvent.call(self);
+			nextButton().addEventListener('click', function () {
+				//TODO this trigger may have bug should not be undefined
+				self.trigger('beforeItemChange', self.currentkey);
+				self.trigger('afterItemChange', self.currentKey);				
+			});
+			frontButton().addEventListener('click', function () {
+				self.trigger('beforeItemChange', self.currentKey);
+				self.trigger('afterItemChange', self.currentKey);
+				
+			});
+			
+			self.on('beforeItemChange', function (params) {
+				console.log(params);
+			});
+			
+			self.on('afterItemChange', function (params) {
+				console.log(params);
+			})
+			self.currentKey = valuesOfOption()[0];
+		}	
 	}
 	
-	function selectElement() {
-		return multiPageDiv().getElementsByTagName('select')[0];
-	}
-	
-	function frontButton() {
-		return multiPageDiv().getElementsByClassName('a')[0];
-	}
-	
-	function nextButton() {
-		return multiPageDiv().getElementsByClassName('a')[1];
-	}
-	
-	function init() {
-		nextButton().addEventListener('click', function () {
-			console.log('you click me !!!');
-		});
-	}	
-}
-MultiPage.prototype = Object.create(UIEvent.prototype);
+	MultiPage.prototype = Object.create(UEvent.prototype);
+	return MultiPage;
+})();
+
 
 
 function eachHTMLCollection(tags, func) {
