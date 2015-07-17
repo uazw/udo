@@ -112,19 +112,31 @@ var MultiPage  = (function () {
 			return multiPageDiv().getElementsByTagName('a')[1];
 		}
 		
+		function selectedElementChange(element) {
+			self.trigger('beforeItemChange', element);
+			selectElement().value = element;
+			self.currentKey = element;
+			self.trigger('afterItemChange', self.currentKey);
+		}
+		
+		function findKeyIndexWithOffset() {
+			
+		}
+		
 		function init() {
 			UEvent.call(self);
-			frontButton().addEventListener('click', function () {
-				self.trigger('beforeItemChange', self.currentKey);
-				self.trigger('afterItemChange', self.currentKey);
-				
+			frontButton().addEventListener('click', function () {	
+				//TODO change to front key
+				var index = valuesOfOption().indexOf(self.currentKey);
+				selectedElementChange(valuesOfOption()[index-1]);
 			});
 			nextButton().addEventListener('click', function () {
-				//TODO this trigger may have bug should not be undefined
-				console.log(self.currentKey);
-				self.trigger('beforeItemChange', self.currentKey);								
-				self.trigger('afterItemChange', self.currentKey);				
+				//TODO change to next key
+				var index = valuesOfOption().indexOf(self.currentKey);
+				console.log(valuesOfOption()[index+1]);
+				selectedElementChange(valuesOfOption()[index+1]);		
 			});
+			
 			
 			self.on('beforeItemChange', function (params) {
 				console.log(params);
