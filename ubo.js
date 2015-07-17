@@ -114,15 +114,16 @@ var MultiPage  = (function () {
 		
 		function init() {
 			UEvent.call(self);
-			nextButton().addEventListener('click', function () {
-				//TODO this trigger may have bug should not be undefined
-				self.trigger('beforeItemChange', self.currentkey);
-				self.trigger('afterItemChange', self.currentKey);				
-			});
 			frontButton().addEventListener('click', function () {
 				self.trigger('beforeItemChange', self.currentKey);
 				self.trigger('afterItemChange', self.currentKey);
 				
+			});
+			nextButton().addEventListener('click', function () {
+				//TODO this trigger may have bug should not be undefined
+				console.log(self.currentKey);
+				self.trigger('beforeItemChange', self.currentKey);								
+				self.trigger('afterItemChange', self.currentKey);				
 			});
 			
 			self.on('beforeItemChange', function (params) {
